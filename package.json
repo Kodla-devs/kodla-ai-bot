@@ -1,7 +1,7 @@
 {
   "name": "kodla-ai-bot",
   "version": "1.0.0",
-  "description": "Discord bot with ping command",
+  "description": "Kodla - ai discord bot iste ne bakiyon",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
