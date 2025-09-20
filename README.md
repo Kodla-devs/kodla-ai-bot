@@ -1,85 +1,98 @@
-# kodla-ai-bot
-Adımlar (numaralandırılmış, bağımlılık ile)
+# Kodla Dev AI Discord Bot Projesi
 
-Discord veri seti oluşturma
+Bu proje iki ana bileşenden oluşur:
+1. **Python Backend**: YouTube kanal analizi ve AI dataset oluşturma
+2. **Node.js Discord Bot**: AI destekli Discord botu
 
-Discord kanallarındaki mesajları, kullanıcı rol/kanal meta verilerini ve kontekst pencerelerini içeren temizlenmiş veri seti üretilecek (CSV/JSON/Parquet).
+## 🏗️ Proje Yapısı
 
-Output: fine-tune hazır veri (ör. instruction-style pairs veya conversational turns).
+```
+kodla-dev-bot/
+├── 🐍 Python Backend
+│   ├── youtube_analyzer.py     # Ana analiz scripti
+│   ├── demo_analyzer.py        # Test için demo
+│   ├── requirements.txt        # Python bağımlılıkları
+│   └── kodla_dev_dataset.jsonl # Oluşturulan dataset
+├── 🤖 Discord Bot
+│   ├── bot.js                  # Ana bot dosyası
+│   ├── package.json           # Node.js bağımlılıkları
+│   └── .env                   # Environment variables
+└── 📚 Çıktılar
+    ├── combined_transcripts.txt
+    └── kodla_dev_dataset.jsonl
+```
 
-Bağımlılık: 3. adım için zorunlu.
+## 🚀 Kurulum
 
-YouTube verilerini çekme (Python)
+### 1. Python Backend Kurulumu
 
-YouTube API ile video başlık, açıklama, altyazı (varsa) çekilecek; her video için basit metadata tutulacak.
+```bash
+# Python kütüphanelerini yükle
+pip install -r requirements.txt
 
-Output: RAG için kullanılacak text parçaları + id/URL.
+# YouTube API anahtarını youtube_analyzer.py dosyasına gir
+# Google Cloud Console'dan YouTube Data API v3 anahtarı al
+```
 
-Bağımlılık: 4. adım için zorunlu.
+### 2. Discord Bot Kurulumu
 
-Discord verisiyle model fine-tune (veya LoRA/peft)
+```bash
+# Node.js bağımlılıklarını yükle
+npm install
 
-adım tamamlandığında aynı kişi veya ekip fine-tune yapar (LoRA/LoCon önerilir hafif kaynaklarla).
+# Environment dosyasını oluştur
+cp .env.example .env
 
-Output: local deploy için quantize edilebilecek model/LoRA dosyası.
+# .env dosyasını düzenle:
+# - DISCORD_TOKEN: Discord Developer Portal'dan
+# - CLIENT_ID: Bot Application ID
+# - YOUTUBE_API_KEY: Google Cloud Console'dan
+```
 
-Bağımlılık: 1.
+## 📋 Kullanım
 
-YouTube verileriyle RAG pipeline kurma
+### Adım 1: Dataset Oluştur (Python)
+```bash
+python youtube_analyzer.py
+```
 
-2. adımdan gelen veriler embed edilip (embedding modeli), vektör DB’ye atılacak; retrieval + prompt şablonları hazırlanacak.
+### Adım 2: Discord Bot'u Başlat (Node.js)
+```bash
+npm start
+# veya geliştirme için:
+npm run dev
+```
 
-İlk aşamada dummy veritabanı / küçük FAISS denemesi yeterli; prod için Milvus/Weaviate/VectorDB tercih edilebilir.
+## 🤖 Bot Komutları
 
-Küfür listesine göre metin analizi (Python)
+- `/yardim` - Bot hakkında bilgi
+- `/soru <soru>` - AI'ya soru sor
+- `/istatistik` - Bot istatistikleri
+- `/kanal` - Kodla Dev kanalı bilgisi
 
-Gelen metinleri küfür listesiyle eşleştirip skorlama yapan fonksiyon yazılacak. (negatif/orta/pozitif veya risk score)
+## ✨ Özellikler
 
-Ayrıca hem mesaj hem URL içeriği için "saldırganlık, hakaret, hedef tipi" gibi etiketler dönecek.
+### Python Backend:
+✅ YouTube kanal analizi
+✅ Otomatik transkript çekme
+✅ Metin temizleme ve işleme
+✅ Soru-cevap dataset oluşturma
+✅ JSONL format export
 
-Post içeriği ve link içeriğini düz metne dönüştürme (Python)
+### Discord Bot:
+✅ Slash komutları
+✅ AI destekli soru-cevap
+✅ Otomatik mesaj algılama
+✅ Embed mesajları
+✅ İstatistik takibi
 
-Eğer post içinde link varsa (YouTube, Twitter, web) otomatik fetch+parse yapıp sayfa metnini çıkaran modül.
+## 🔧 API Anahtarları
 
-Output: temiz text bloğu (4 için de kullanılabilir).
+1. **YouTube Data API v3**: [Google Cloud Console](https://console.cloud.google.com/)
+2. **Discord Bot Token**: [Discord Developer Portal](https://discord.com/developers/applications)
 
-Modeli sunucuda llama.cpp ile ayağa kaldırma
+## 📊 Dataset Formatı
 
-Seçilen dili modelini (<=1B parametre) llama.cpp ile çalışır hâle getirecek kişi/görev. (GGUF/quantize vb.)
-
-Not: modeli ayağa kaldıran kişi 8. adımın bazı alt maddelerini de yapacak (çünkü doğrudan çalışan modele erişimi olacak).
-
-Önerilen model: Llama-3.2 1B (instruction tuned, 1B) — küçük, pratiktir ve yerelde çalıştırılabilecek 1B sınıfı bir seçenek. 
-Hugging Face
-+1
-
-Prompt özelleştirme + öneri sistemi (model üzerinde)
-
-5 ve 6’dan gelen etiket/skor/metinleri kullanarak prompt şablonları ve bir öneri (recommendation) katmanı hazırlama.
-
-7’de ayağa kaldırılan model ile entegrasyon: RAG çağrıları, fallbacks, güvenlik filtreleri.
-
-7’yi yapan kişi 8 ile yakın çalışmalı (veya aynı kişi olmalı).
-
-Projeyi birleştirme / dummy entegrasyonlar
-
-Önceki adımların mock/stub sürümleriyle uçtan uca test (ör. model hazırmış gibi davranıp discord fonksiyonlarını test etme).
-
-9 ve 10 için prod hazır temizleme (dokümantasyon, deploy scriptleri) sonradan detaylandırılabilir.
-
-Güvenlik & üretim hazır hâle getirme
-
-Rate limiting, input sanitization, cevap filtreleri, logging, hata yönetimi, privacy (kullanıcı verisi saklama politikası).
-
-Discord üzerinde çalışacak fonksiyonların yazılması (Python)
-
-Komutlar (slash komutlar), webhook dinleme, moderation eventleri, message parser vs. yazılacak.
-
-Bu adımda model çağrıları için test stubları kullanılarak bağımsız geliştirme yapılabilir.
-
-Discord ↔ Model / RAG entegrasyonu (Python)
-
-11’in yazdığı fonksiyonları gerçek model / RAG ile bağlama: çağrı, timeout, fallback mekanizmaları.
-
-13+. Geliştirme sonrası ek özellikler
-- Kullanıcı geribildirim arayüzü, dashboard, analytics, iyileştirme döngüleri.
+```json
+{"messages": [{"role": "user", "content": "Soru"}, {"role": "assistant", "content": "Cevap"}]}
+```

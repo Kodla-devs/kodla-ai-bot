@@ -1,0 +1,5 @@
+{"messages": [{"role": "user", "content": "Python programlamaya nasıl başlarım?"}, {"role": "assistant", "content": "Python programlamaya başlamak için önce Python'ı bilgisayarınıza kurmalısınız. Sonra temel syntax, değişkenler ve veri tipleri ile başlayabilirsiniz."}]}
+{"messages": [{"role": "user", "content": "Kodla Dev kanalında hangi konular var?"}, {"role": "assistant", "content": "Kodla Dev kanalında Python, yapay zeka, oyun geliştirme ve web programlama konuları bulunmaktadır."}]}
+{"messages": [{"role": "user", "content": "Python'da liste nasıl oluşturulur?"}, {"role": "assistant", "content": "Python'da liste oluşturmak için köşeli parantez kullanılır. Örnek: my_list = [1, 2, 3, 'hello']"}]}
+{"messages": [{"role": "user", "content": "Yapay zeka öğrenmek için hangi dil önerilir?"}, {"role": "assistant", "content": "Yapay zeka öğrenmek için Python dili önerilir çünkü TensorFlow, PyTorch gibi güçlü kütüphanelere sahiptir."}]}
+{"messages": [{"role": "user", "content": "Python'da fonksiyon nasıl tanımlanır?"}, {"role": "assistant", "content": "Python'da fonksiyon def anahtar kelimesi ile tanımlanır. Örnek: def my_function(): return 'Hello'"}]}

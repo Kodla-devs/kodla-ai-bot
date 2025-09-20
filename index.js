@@ -2,8 +2,9 @@ require('dotenv').config();
 const { Client, GatewayIntentBits, ActivityType, EmbedBuilder, SlashCommandBuilder, REST, Routes } = require('discord.js');
 const chalk = require('chalk');
 const os = require('os');
+const fs = require('fs');
 
-// Enhanced Logging System
+// 🎨 Gelişmiş Türkçe Logging Sistemi - Süper Güzel Versiyon! 🎨
 class Logger {
     static getTimestamp() {
         return new Date().toLocaleString('tr-TR', {
@@ -18,60 +19,104 @@ class Logger {
     }
 
     static success(message) {
-        console.log(chalk.green.bold(`[${this.getTimestamp()}] [SUCCESS] ${message}`));
+        const border = chalk.green('═'.repeat(5));
+        console.log(`${border} ${chalk.green.bold(`[${this.getTimestamp()}] [✅ BAŞARI] ${message}`)} ${border}`);
     }
 
     static info(message) {
-        console.log(chalk.blue.bold(`[${this.getTimestamp()}] [INFO] ${message}`));
+        const border = chalk.blue('─'.repeat(3));
+        console.log(`${border} ${chalk.blue.bold(`[${this.getTimestamp()}] [📌 BİLGİ] ${message}`)} ${border}`);
     }
 
     static warning(message) {
-        console.log(chalk.yellow.bold(`[${this.getTimestamp()}] [WARNING] ${message}`));
+        const border = chalk.yellow('⚠'.repeat(3));
+        console.log(`${border} ${chalk.yellow.bold(`[${this.getTimestamp()}] [⚠️ UYARI] ${message}`)} ${border}`);
     }
 
     static error(message) {
-        console.log(chalk.red.bold(`[${this.getTimestamp()}] [ERROR] ${message}`));
+        const border = chalk.red('❌'.repeat(3));
+        console.log(`${border} ${chalk.red.bold(`[${this.getTimestamp()}] [💥 HATA] ${message}`)} ${border}`);
     }
 
     static command(user, guild, command, type = 'PREFIX') {
         const userTag = `${user.username}#${user.discriminator}`;
         const guildName = guild ? guild.name : 'DM';
-        console.log(chalk.cyan(`[${this.getTimestamp()}] [${type}] ${chalk.bold(userTag)} used ${chalk.bold(command)} in ${chalk.bold(guildName)}`));
+        const typeEmoji = type === 'SLASH' ? '⚔️' : '🗨️';
+        const commandColor = type === 'SLASH' ? chalk.hex('#00d4aa') : chalk.hex('#ffa500');
+        console.log(commandColor(`🎯 [${this.getTimestamp()}] [${typeEmoji} ${type}] ${chalk.bold.underline(userTag)} ➜ ${chalk.bold.italic(command)} 📍 ${chalk.bold(guildName)}`));
     }
 
     static system(message) {
-        console.log(chalk.magenta.bold(`[${this.getTimestamp()}] [SYSTEM] ${message}`));
+        const gear = chalk.magenta('⚙️');
+        console.log(`${gear} ${chalk.magenta.bold(`[${this.getTimestamp()}] [🔧 SİSTEM] ${message}`)} ${gear}`);
     }
 
     static discord(message) {
-        console.log(chalk.hex('#5865F2').bold(`[${this.getTimestamp()}] [DISCORD] ${message}`));
+        const discordColor = chalk.hex('#5865F2');
+        console.log(discordColor.bold(`🤖 [${this.getTimestamp()}] [💙 DİSCORD] ${message} 💙`));
+    }
+
+    static performance(message) {
+        console.log(chalk.hex('#32CD32')(`⚡ [${this.getTimestamp()}] [📈 PERFORMANS] ${message} ⚡`));
+    }
+
+    static user(message) {
+        console.log(chalk.hex('#FF69B4')(`👤 [${this.getTimestamp()}] [👥 KULLANICI] ${message} 👤`));
     }
 
     static startup() {
         console.clear();
-        console.log(chalk.hex('#1e40af').bold('\n' + '═'.repeat(80)));
-        console.log(chalk.hex('#1e40af').bold('█'.repeat(20) + ' KODLA AI BOT STARTING ' + '█'.repeat(20)));
-        console.log(chalk.hex('#1e40af').bold('═'.repeat(80) + '\n'));
         
-        this.system(`Node.js Version: ${process.version}`);
-        this.system(`Platform: ${os.platform()} ${os.arch()}`);
-        this.system(`Memory: ${Math.round(os.totalmem() / 1024 / 1024)} MB`);
-        this.system(`CPU: ${os.cpus()[0].model}`);
-        this.system(`Hostname: ${os.hostname()}`);
-        console.log('');
+        // Ana başlık
+        console.log(chalk.hex('#FF6B6B').bold('\n' + '═'.repeat(100)));
+        console.log(chalk.hex('#4ECDC4').bold('█'.repeat(30) + ' KODLA AI BOT BAŞLATILIYOR 🚀 ' + '█'.repeat(30)));
+        console.log(chalk.hex('#45B7D1').bold('═'.repeat(100)));
+        
+        // Alt başlık
+        console.log(chalk.hex('#96CEB4').bold('🎆 Türkçe Discord Bot Sistemi - Süper Güçlü Versiyon \n'));
+        
+        // Sistem bilgileri
+        this.system(`💻 Node.js Sürümü: ${chalk.yellow.bold(process.version)}`);
+        this.system(`🖥️ Platform: ${chalk.yellow.bold(os.platform())} ${chalk.yellow.bold(os.arch())}`);
+        this.system(`💾 Bellek: ${chalk.yellow.bold(Math.round(os.totalmem() / 1024 / 1024))} MB Toplam`);
+        this.system(`⚙️ CPU: ${chalk.yellow.bold(os.cpus()[0].model.substring(0, 40))}...`);
+        this.system(`网讯 Bilgisayar Adı: ${chalk.yellow.bold(os.hostname())}`);
+        this.system(`🕰️ Çalışma Süresi: ${chalk.yellow.bold(Math.floor(os.uptime() / 3600))} saat`);
+        
+        console.log(chalk.gray('\n' + '─'.repeat(100) + '\n'));
     }
 
     static ready(botTag, guildCount, userCount) {
-        console.log(chalk.green.bold('\n' + '🎉'.repeat(40)));
-        console.log(chalk.green.bold('           BOT SUCCESSFULLY ONLINE!'));
-        console.log(chalk.green.bold('🎉'.repeat(40) + '\n'));
+        console.log(chalk.green.bold('\n' + '🎆'.repeat(50)));
+        console.log(chalk.green.bold('🚀          BOT BAŞARIYLA ÇEVİRİMİÇİ OLDU!          🚀'));
+        console.log(chalk.green.bold('🎆'.repeat(50) + '\n'));
         
-        this.success(`Logged in as: ${chalk.bold(botTag)}`);
-        this.success(`Serving ${chalk.bold(guildCount)} guilds with ${chalk.bold(userCount)} users`);
+        this.success(`🤖 Giriş yapılan hesap: ${chalk.bold.underline(botTag)}`);
+        this.success(`🏯 ${chalk.bold(guildCount)} sunucuda 👥 ${chalk.bold(userCount)} kullanıcıya hizmet veriliyor`);
+        this.performance(`Bot hazırlık süresi: ${chalk.bold(((Date.now() - global.botStartTime) / 1000).toFixed(2))}s`);
+    }
+
+    static commandStats(slashCount, prefixCount, totalCommands) {
+        console.log(chalk.gray('\n' + '═'.repeat(100)));
+        console.log(chalk.hex('#FFD700').bold(`📈 KOMUT İSTATİSTİKLERİ - Toplam: ${chalk.white.bold(totalCommands)} Komut 📈`));
+        console.log(chalk.hex('#32CD32')(`   • Slash Komutları: ${chalk.bold(slashCount)} (⚔️ %${((slashCount/totalCommands)*100).toFixed(1)})`) );
+        console.log(chalk.hex('#FF6347')(`   • Prefix Komutları: ${chalk.bold(prefixCount)} (🗨️ %${((prefixCount/totalCommands)*100).toFixed(1)})`) );
+        console.log(chalk.gray('═'.repeat(100)));
     }
 }
 
+// 📊 Komut sayaçları ve performans takibi
+let commandStats = {
+    slash: 0,
+    prefix: 0,
+    totalToday: 0,
+    errors: 0,
+    lastReset: new Date().toDateString()
+};
+
+// 🕰️ Bot başlangıç zamanı
 const startTime = Date.now();
+global.botStartTime = Date.now();
 
 const client = new Client({ 
     intents: [
@@ -81,16 +126,16 @@ const client = new Client({
     ] 
 });
 
-// Function to create help embed
+// 🎨 Mavi temalı yardım embed'i oluştur
 function createHelpEmbed() {
     return new EmbedBuilder()
-        .setColor('#1e40af') // Beautiful blue color
-        .setTitle('🤖 Kodla AI Bot - Komutlar')
-        .setDescription('Prefix komutları (!) ve slash komutları (/) kullanabilirsiniz!')
+        .setColor('#1e40af') // Güzel mavi renk
+        .setTitle('🤖 Kodla AI Bot - Komutlar Rehberi')
+        .setDescription('🚀 Prefix komutları (!) ve slash komutları (/) kullanabilirsiniz! 🚀')
         .addFields(
             { 
                 name: '🏓 ping', 
-                value: 'Botun ping değerini gösterir\n`!ping` veya `/ping`', 
+                value: 'Botun ping değerini ve bağlantı kalitesini gösterir\n`!ping` veya `/ping`', 
                 inline: true 
             },
             { 
@@ -106,110 +151,185 @@ function createHelpEmbed() {
         )
         .addFields(
             {
-                name: '💡 **Öneriler**',
-                value: '• Slash komutları daha hızlı ve kullanışlıdır\n• Bot sürekli geliştirilmektedir\n• Sorun yaşarsanız ping komutuyla bağlantıyı test edin',
+                name: '💡 **Öneriler ve İpuçları**',
+                value: '• Slash komutları daha hızlı ve kullanışlıdır ⚡\n• Bot sürekli geliştirilmektedir 🔧\n• Sorun yaşarsınız ping komutuyla bağlantıyı test edin 🔍\n• Komutları hem DM hem de sunucularda kullanabilirsiniz 💬',
                 inline: false
             }
         )
-        .setThumbnail(client.user.displayAvatarURL({ dynamic: true, size: 256 }))
+        .setThumbnail(client.user ? client.user.displayAvatarURL({ dynamic: true, size: 256 }) : null)
         .setFooter({ 
-            text: `Prefix: ${PREFIX} | Slash komutları da desteklenir`, 
-            iconURL: client.user.displayAvatarURL() 
+            text: `Prefix: ${PREFIX} | Slash komutları da desteklenir 🚀 | ${commandStats.totalToday} komut bugün kullanıldı`, 
+            iconURL: client.user ? client.user.displayAvatarURL() : null
         })
         .setTimestamp();
 }
 
-// Function to register slash commands
+// 📺 Improved slash command registration function
 async function registerSlashCommands() {
     const commands = [
         new SlashCommandBuilder()
             .setName('ping')
-            .setDescription('Botun ping değerini gösterir'),
+            .setDescription('🏓 Shows bot ping and connection quality'),
         new SlashCommandBuilder()
             .setName('uptime')
-            .setDescription('Botun ne kadar süredir çalıştığını gösterir'),
+            .setDescription('⏰ Shows how long the bot has been running'),
         new SlashCommandBuilder()
             .setName('yardim')
-            .setDescription('Bot komutlarını gösterir')
+            .setDescription('📖 Shows bot commands and usage guide')
     ];
 
     const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
     try {
-        console.log('🔄 Slash komutları kaydediliyor...');
+        Logger.system('🔄 Slash komutları kaydediliyor...');
         
-        // Delete existing commands first (optional, for clean registration)
-        console.log('🧯 Mevcut komutlar temizleniyor...');
+        // Clear existing commands first
+        Logger.info('🧹 Mevcut komutlar temizleniyor...');
         await rest.put(
             Routes.applicationCommands(client.user.id),
             { body: [] }
         );
         
-        // Register new commands
-        Logger.system('Registering new slash commands...');
-        const data = await rest.put(
+        // Register commands for each guild (faster appearance)
+        const guilds = client.guilds.cache;
+        let registeredGuilds = 0;
+        
+        for (const [guildId, guild] of guilds) {
+            try {
+                await rest.put(
+                    Routes.applicationGuildCommands(client.user.id, guildId),
+                    { body: commands }
+                );
+                registeredGuilds++;
+                Logger.success(`✅ ${guild.name} sunucusuna komutlar eklendi`);
+            } catch (guildError) {
+                Logger.warning(`⚠️ ${guild.name} sunucusuna komut eklenemedi: ${guildError.message}`);
+                commandStats.errors++;
+            }
+        }
+        
+        // Also register global commands (for new servers)
+        Logger.system('🌍 Global komutlar kaydediliyor...');
+        const globalData = await rest.put(
             Routes.applicationCommands(client.user.id),
             { body: commands }
         );
         
-        Logger.success(`Successfully registered ${chalk.bold(data.length)} slash commands!`);
-        data.forEach(cmd => {
-            Logger.success(`  /${cmd.name} - ${cmd.description}`);
+        Logger.success(`✅ Başarıyla ${chalk.bold(globalData.length)} slash komutu kaydedildi!`);
+        Logger.success(`📊 ${chalk.bold(registeredGuilds)} sunucuya özel komutlar eklendi`);
+        
+        globalData.forEach(cmd => {
+            Logger.success(`  • /${cmd.name} - ${cmd.description}`);
         });
-        Logger.warning('Slash commands may take up to 5 minutes to appear in Discord.');
+        
+        Logger.info('⚡ Guild komutları hemen kullanılabilir, global komutlar 1-5 dakika sürebilir.');
         
     } catch (error) {
-        console.error('❌ Slash komutları kaydedilirken hata:', error);
+        Logger.error(`❌ Slash komutları kaydedilirken hata: ${error.message}`);
+        commandStats.errors++;
         if (error.code === 50001) {
-            console.error('⚠️ Hata: Bot yeterli izinlere sahip değil!');
-            console.error('Bot’u sunucuya "applications.commands" izni ile tekrar davet edin.');
+            Logger.error('⚠️ Hata: Bot yeterli izinlere sahip değil!');
+            Logger.warning('Botu sunucuya applications.commands izni ile tekrar davet edin.');
+            Logger.info('🔗 Bot davet linki oluşturma: https://discord.com/developers/applications');
+        } else if (error.code === 50035) {
+            Logger.error('⚠️ Hata: Komut tanımlarında sorun var!');
+        } else if (error.code === 429) {
+            Logger.error('⚠️ Rate limit! Birkaç dakika bekleyin.');
         }
     }
 }
-// Initialize startup logging
+
+// 🎆 Gelişmiş bot durum ayarlayıcısı
+async function setBotStatus() {
+    Logger.discord('🔧 Bot durumu ayarlanıyor...');
+    
+    // Aktivite tipini otomatik belirle
+    let activityType = ActivityType.Watching;
+    const activity = BOT_ACTIVITY.toLowerCase();
+    
+    if (activity.includes('dinli') || activity.includes('listen')) {
+        activityType = ActivityType.Listening;
+    } else if (activity.includes('oyna') || activity.includes('play')) {
+        activityType = ActivityType.Playing;
+    } else if (activity.includes('izli') || activity.includes('watch') || activity.includes('seyret')) {
+        activityType = ActivityType.Watching;
+    } else if (activity.includes('yarış') || activity.includes('compete')) {
+        activityType = ActivityType.Competing;
+    }
+    
+    try {
+        await client.user.setPresence({
+            activities: [{
+                name: BOT_ACTIVITY,
+                type: activityType
+            }],
+            status: BOT_STATUS
+        });
+        
+        const statusText = {
+            [ActivityType.Watching]: '👀 İzliyor',
+            [ActivityType.Listening]: '🎧 Dinliyor', 
+            [ActivityType.Playing]: '🎮 Oynuyor',
+            [ActivityType.Competing]: '🏆 Yarışıyor'
+        };
+        
+        Logger.success(`✅ Bot durumu başarıyla ayarlandı!`);
+        Logger.success(`   • Durum: ${chalk.yellow.bold(BOT_STATUS.toUpperCase())}`);
+        Logger.success(`   • Aktivite: ${chalk.yellow.bold(statusText[activityType])} "${chalk.italic(BOT_ACTIVITY)}"`);
+        return true;
+    } catch (error) {
+        Logger.error(`❌ Bot durumu ayarlanırken hata: ${error.message}`);
+        commandStats.errors++;
+        return false;
+    }
+}
+
+// Bot yapılandırmasını yükle
 Logger.startup();
 
 const PREFIX = process.env.BOT_PREFIX || '!';
-const BOT_STATUS = process.env.BOT_STATUS || 'online';
-const BOT_ACTIVITY = process.env.BOT_ACTIVITY || 'Listening to !ping';
+const BOT_STATUS = process.env.BOT_STATUS || 'idle';
+const BOT_ACTIVITY = process.env.BOT_ACTIVITY || 'Kodla AI Projesi';
 
-Logger.info(`Configuration loaded:`);
-Logger.info(`  Prefix: ${chalk.bold(PREFIX)}`);
-Logger.info(`  Status: ${chalk.bold(BOT_STATUS)}`);
-Logger.info(`  Activity: ${chalk.bold(BOT_ACTIVITY)}`);
+Logger.info(`Yapılandırma yüklendi:`);
+Logger.info(`  🔹 Prefix: ${chalk.bold(PREFIX)}`);
+Logger.info(`  🔹 Durum: ${chalk.bold(BOT_STATUS)}`);
+Logger.info(`  🔹 Aktivite: ${chalk.bold(BOT_ACTIVITY)}`);
 console.log('');
 
-client.once('ready', async () => {
+client.once('clientReady', async () => {
     const guildCount = client.guilds.cache.size;
     const userCount = client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0);
     
     Logger.ready(client.user.tag, guildCount, userCount);
     
-    Logger.discord('Setting bot presence...');
-    client.user.setPresence({
-        activities: [{
-            name: BOT_ACTIVITY,
-            type: ActivityType.Watching
-        }],
-        status: BOT_STATUS
-    });
-    Logger.success(`Presence set: ${BOT_STATUS} - ${BOT_ACTIVITY}`);
+    // Bot durumunu ayarla
+    await setBotStatus();
     
     console.log('');
-    // Register slash commands
+    // Slash komutları kaydet
     await registerSlashCommands();
     
     console.log('');
-    Logger.system('Bot is now ready to receive commands!');
-    Logger.info('Available commands: !ping, !uptime, !yardim, /ping, /uptime, /yardim');
-    console.log(chalk.gray('─'.repeat(80)));
+    Logger.system('🎯 Bot komutları almaya hazır!');
+    Logger.info('📋 Kullanılabilir komutlar: !ping, !uptime, !yardim, /ping, /uptime, /yardim');
+    console.log(chalk.gray('─'.repeat(90)));
 });
 
-// Enhanced slash command handler with logging
+// 🚀 Enhanced slash command handler with proper debugging
 client.on('interactionCreate', async interaction => {
-    if (!interaction.isChatInputCommand()) return;
+    // Debug logging
+    Logger.user(`Interaction received: ${interaction.type} from ${interaction.user.username}`);
+    
+    if (!interaction.isChatInputCommand()) {
+        Logger.user(`Non-command interaction ignored: ${interaction.type}`);
+        return;
+    }
 
     const { commandName } = interaction;
+    commandStats.slash++;
+    commandStats.totalToday++;
+    
     Logger.command(interaction.user, interaction.guild, `/${commandName}`, 'SLASH');
 
     try {
@@ -222,11 +342,14 @@ client.on('interactionCreate', async interaction => {
             const pingEmbed = new EmbedBuilder()
                 .setColor('#00ff00')
                 .setTitle('🏓 Pong!')
+                .setDescription(`Bot ping bilgileri aşağıda gösterilmiştir:`)
                 .addFields(
-                    { name: '📨 Message Latency', value: `\`${ping}ms\``, inline: true },
-                    { name: '🌐 API Latency', value: `\`${apiPing}ms\``, inline: true }
+                    { name: '📨 Mesaj Gecikmesi', value: `\`${ping}ms\``, inline: true },
+                    { name: '🌐 API Gecikmesi', value: `\`${apiPing}ms\``, inline: true },
+                    { name: '📈 Kalite', value: apiPing < 100 ? '🟢 Mükemmel' : apiPing < 200 ? '🟡 İyi' : '🔴 Yavaş', inline: true }
                 )
-                .setTimestamp();
+                .setTimestamp()
+                .setFooter({ text: `Komut çalıştırma süresi: ${ping}ms` });
             
             await interaction.reply({ embeds: [pingEmbed] });
         }
@@ -245,10 +368,11 @@ client.on('interactionCreate', async interaction => {
             
             const uptimeEmbed = new EmbedBuilder()
                 .setColor('#0099ff')
-                .setTitle('⏰ Bot Uptime')
-                .setDescription(`Bot **${uptimeString}** süredir çalışıyor.`)
+                .setTitle('⏰ Bot Çalışma Süresi')
+                .setDescription(`Bot **${uptimeString}** süredir kesintisiz çalışıyor! 🚀`)
                 .addFields(
-                    { name: '🚀 Başlatılma Zamanı', value: `<t:${Math.floor(startTime / 1000)}:F>`, inline: false }
+                    { name: '🚀 Başlatılma Zamanı', value: `<t:${Math.floor(startTime / 1000)}:F>`, inline: false },
+                    { name: '📈 Komut İstatistikleri', value: `Slash: ${commandStats.slash} | Prefix: ${commandStats.prefix}`, inline: false }
                 )
                 .setTimestamp();
             
@@ -259,23 +383,24 @@ client.on('interactionCreate', async interaction => {
             await interaction.reply({ embeds: [helpEmbed] });
         }
     } catch (error) {
-        Logger.error(`Error handling slash command /${commandName}: ${error.message}`);
+        Logger.error(`Slash komut /${commandName} işlenirken hata: ${error.message}`);
+        commandStats.errors++;
         
-        // Try to respond if interaction hasn't been replied to yet
-        if (!interaction.replied && !interaction.deferred) {
-            try {
+        // Eğer interaction henüz yanıtlanmamışsa hata mesajı gönder
+        try {
+            if (!interaction.replied && !interaction.deferred) {
                 await interaction.reply({ 
-                    content: 'Bir hata oluştu. Lütfen tekrar deneyin.', 
+                    content: '❌ Bir hata oluştu! Lütfen tekrar deneyin.', 
                     ephemeral: true 
                 });
-            } catch (replyError) {
-                Logger.error(`Failed to send error response: ${replyError.message}`);
             }
+        } catch (replyError) {
+            Logger.error(`Hata yanıtı gönderilemedi: ${replyError.message}`);
         }
     }
 });
 
-// Enhanced message command handler with logging
+// Gelişmiş prefix komut işleyicisi
 client.on('messageCreate', message => {
     if (message.author.bot) return;
     
@@ -284,6 +409,8 @@ client.on('messageCreate', message => {
     const args = message.content.slice(PREFIX.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
     
+    commandStats.prefix++;
+    commandStats.totalToday++;
     Logger.command(message.author, message.guild, `${PREFIX}${command}`, 'PREFIX');
     
     try {
@@ -296,11 +423,14 @@ client.on('messageCreate', message => {
             const pingEmbed = new EmbedBuilder()
                 .setColor('#00ff00')
                 .setTitle('🏓 Pong!')
+                .setDescription(`Bot ping bilgileri aşağıda gösterilmiştir:`)
                 .addFields(
-                    { name: '📨 Message Latency', value: `\`${ping}ms\``, inline: true },
-                    { name: '🌐 API Latency', value: `\`${apiPing}ms\``, inline: true }
+                    { name: '📨 Mesaj Gecikmesi', value: `\`${ping}ms\``, inline: true },
+                    { name: '🌐 API Gecikmesi', value: `\`${apiPing}ms\``, inline: true },
+                    { name: '📈 Kalite', value: apiPing < 100 ? '🟢 Mükemmel' : apiPing < 200 ? '🟡 İyi' : '🔴 Yavaş', inline: true }
                 )
-                .setTimestamp();
+                .setTimestamp()
+                .setFooter({ text: `Komut çalıştırma süresi: ${ping}ms` });
             
             message.reply({ embeds: [pingEmbed] });
         }
@@ -320,10 +450,11 @@ client.on('messageCreate', message => {
             
             const uptimeEmbed = new EmbedBuilder()
                 .setColor('#0099ff')
-                .setTitle('⏰ Bot Uptime')
-                .setDescription(`Bot **${uptimeString}** süredir çalışıyor.`)
+                .setTitle('⏰ Bot Çalışma Süresi')
+                .setDescription(`Bot **${uptimeString}** süredir kesintisiz çalışıyor! 🚀`)
                 .addFields(
-                    { name: '🚀 Başlatılma Zamanı', value: `<t:${Math.floor(startTime / 1000)}:F>`, inline: false }
+                    { name: '🚀 Başlatılma Zamanı', value: `<t:${Math.floor(startTime / 1000)}:F>`, inline: false },
+                    { name: '📈 Komut İstatistikleri', value: `Slash: ${commandStats.slash} | Prefix: ${commandStats.prefix}`, inline: false }
                 )
                 .setTimestamp();
             
@@ -335,68 +466,90 @@ client.on('messageCreate', message => {
             message.reply({ embeds: [helpEmbed] });
         }
     } catch (error) {
-        Logger.error(`Error handling prefix command ${PREFIX}${command}: ${error.message}`);
+        Logger.error(`Prefix komut ${PREFIX}${command} işlenirken hata: ${error.message}`);
+        commandStats.errors++;
         try {
-            message.reply('Bir hata oluştu. Lütfen tekrar deneyin.');
+            message.reply('❌ Bir hata oluştu! Lütfen tekrar deneyin.');
         } catch (replyError) {
-            Logger.error(`Failed to send error response: ${replyError.message}`);
+            Logger.error(`Hata yanıtı gönderilemedi: ${replyError.message}`);
         }
+    }
+
+    // 📊 Günlük komut sayacını güncelle
+    const today = new Date().toDateString();
+    if (commandStats.lastReset !== today) {
+        commandStats.totalToday = 0;
+        commandStats.lastReset = today;
+    }
+
+    // Her 10 komutta bir istatistik göster
+    const totalCommands = commandStats.slash + commandStats.prefix;
+    if (totalCommands % 10 === 0 && totalCommands > 0) {
+        Logger.commandStats(commandStats.slash, commandStats.prefix, totalCommands);
     }
 });
 
-// Enhanced error handling
+// 🛡️ Gelişmiş hata yönetimi
 client.on('error', error => {
-    Logger.error(`Discord client error: ${error.message}`);
-    Logger.error(`Stack: ${error.stack}`);
+    Logger.error(`💥 Discord istemci hatası: ${error.message}`);
+    Logger.error(`🔍 Hata detayı: ${error.stack}`);
+    commandStats.errors++;
 });
 
 client.on('warn', warning => {
-    Logger.warning(`Discord client warning: ${warning}`);
+    Logger.warning(`⚡ Discord istemci uyarısı: ${warning}`);
 });
 
-client.on('disconnect', () => {
-    Logger.warning('Bot disconnected from Discord!');
+client.on('disconnect', (event) => {
+    Logger.warning('⚠️ Bot Discord\'dan bağlantısı kesildi!');
+    Logger.warning(`Çıkış kodu: ${event.code}, Sebep: ${event.reason}`);
 });
 
 client.on('reconnecting', () => {
-    Logger.info('Bot reconnecting to Discord...');
+    Logger.info('🔄 Bot Discord\'a yeniden bağlanıyor...');
 });
 
+// 🛡️ Global hata yakalayıcıları
 process.on('unhandledRejection', error => {
-    Logger.error(`Unhandled promise rejection: ${error.message}`);
-    Logger.error(`Stack: ${error.stack}`);
+    Logger.error(`💣 İşlenmemiş promise reddi: ${error.message}`);
+    Logger.error(`🔍 Hata detayı: ${error.stack}`);
+    commandStats.errors++;
 });
 
 process.on('uncaughtException', error => {
-    Logger.error(`Uncaught exception: ${error.message}`);
-    Logger.error(`Stack: ${error.stack}`);
+    Logger.error(`❌ Yakalanmamış hata: ${error.message}`);
+    Logger.error(`🔍 Hata detayı: ${error.stack}`);
+    Logger.error('🚨 Bot kapatiliyor...');
+    commandStats.errors++;
     process.exit(1);
 });
 
-// Graceful shutdown handling
+// 🛡️ Temiz kapanış yönetimi
 process.on('SIGINT', () => {
-    Logger.warning('Received SIGINT. Graceful shutdown...');
+    Logger.warning('🛡 SIGINT sinyali alındı. Bot kapatiliyor...');
     client.destroy();
+    Logger.success('✅ Bot başarıyla kapatıldı!');
     process.exit(0);
 });
 
 process.on('SIGTERM', () => {
-    Logger.warning('Received SIGTERM. Graceful shutdown...');
+    Logger.warning('🛡 SIGTERM sinyali alındı. Bot kapatılıyor...');
     client.destroy();
+    Logger.success('✅ Bot başarıyla kapatıldı!');
     process.exit(0);
 });
 
-// Bot login with enhanced logging
-Logger.info('Attempting to login to Discord...');
+// Bot giriş sistemi
+Logger.info('🚀 Discord\'a giriş yapılıyor...');
 client.login(process.env.DISCORD_TOKEN)
     .then(() => {
-        Logger.success('Discord login successful!');
+        Logger.success('✅ Discord girişi başarılı!');
     })
     .catch(error => {
-        Logger.error(`Discord login failed: ${error.message}`);
+        Logger.error(`❌ Discord girişi başarısız: ${error.message}`);
         if (error.code === 'TOKEN_INVALID') {
-            Logger.error('Invalid bot token! Please check your .env file.');
+            Logger.error('🔑 Geçersiz bot token! .env dosyasını kontrol edin.');
         }
-        Logger.error('Exiting...');
+        Logger.error('🚨 Bot kapatiliyor...');
         process.exit(1);
     });
